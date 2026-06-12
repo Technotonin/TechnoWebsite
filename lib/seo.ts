@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 
 // Shared SEO configuration.
 //
-// IMPORTANT: set NEXT_PUBLIC_SITE_URL (or edit the fallback below) to the
-// real production domain before launch — canonical URLs, Open Graph images,
-// the sitemap, and structured data all derive from it.
+// Production domain. Canonical URLs, Open Graph images, the sitemap,
+// llms.txt links, and structured data all derive from it.
+// NEXT_PUBLIC_SITE_URL overrides the default when set.
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-  "https://www.technotonin.com";
+  "https://wheelchairattachment.com";
 
 export const SITE_NAME = "PAWE";
 export const ORG_NAME = "Technotonin Industries LLC";

@@ -1,49 +1,261 @@
+/* ============================================================================
+   PAWE / Technotonin — Design Tokens
+   Warm cream + amber + horizon blue. Warm editorial register.
+   Ported from the Claude Design handoff bundle (colors_and_type.css).
+   ============================================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ============================== COLORS ============================== */
+
+  /* Brand — PAWE Amber */
+  --color-primary:           #E8780A;
+  --color-primary-active:    #C9620A;
+  --color-primary-hover:     #F08A1F;
+  --color-primary-disabled:  #F5D4B0;
+  --color-primary-soft:      #FBEEDA;
+  --color-primary-ink:       #7A3A04;
+
+  /* Sub-system — Horizon Blue (clinical / provider only) */
+  --color-horizon:           #1B7FB0;
+  --color-horizon-active:    #15648A;
+  --color-horizon-hover:     #2891C5;
+  --color-horizon-soft:      #DCEEF7;
+  --color-horizon-ink:       #0E4361;
+
+  /* Text — warm near-blacks (NEVER #000) */
+  --color-ink:               #1A1612;
+  --color-ink-soft:          #2B2522;
+  --color-body:              #3F3833;
+  --color-muted:             #6B6B6B;
+  --color-muted-soft:        #8E8884;
+
+  /* Hairlines & borders — warm grays */
+  --color-hairline:          #E0DED8;
+  --color-hairline-soft:     #EAE7E1;
+  --color-border-strong:     #B8B3AB;
+
+  /* Surfaces — warm cream system. NEVER pure white as canvas. */
+  --color-canvas:            #F5F4F0;
+  --color-surface-soft:      #EFEDE6;
+  --color-surface-strong:    #E8E5DE;
+  --color-surface-card:      #FFFFFF;
+
+  /* Inversions */
+  --color-on-primary:        #FFFFFF;
+  --color-on-horizon:        #FFFFFF;
+  --color-on-dark:           #F5F4F0;
+  --color-on-ink:            #F5F4F0;
+
+  /* Semantic — warmed, not Tailwind defaults */
+  --color-success:           #3F8F4F;
+  --color-success-soft:      #E3F0E5;
+  --color-error:             #C84A1A;   /* warm terracotta-red */
+  --color-error-soft:        #F9E0D2;
+  --color-legal-link:        #1B7FB0;
+
+  --color-scrim:              rgba(26, 22, 18, 0.6);
+
+  /* ============================== TYPOGRAPHY ============================== */
+  --font-sans:    var(--font-inter-tight), "Söhne", "GT America", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-serif:   var(--font-source-serif), "Tiempos Headline", Charter, "Iowan Old Style", Georgia, serif;
+  --font-mono:    var(--font-jetbrains), "Berkeley Mono", "SF Mono", Menlo, monospace;
+
+  /* ============================== SPACING ============================== */
+  --space-xxs:            2px;
+  --space-xs:             4px;
+  --space-sm:             8px;
+  --space-md:             12px;
+  --space-base:           16px;
+  --space-lg:             24px;
+  --space-xl:             32px;
+  --space-xxl:            48px;
+  --space-section-tight:  64px;
+  --space-section:        96px;
+
+  /* ============================== RADII ============================== */
+  --radius-none:    0;
+  --radius-xs:      4px;
+  --radius-sm:      6px;   /* buttons, inputs */
+  --radius-md:      10px;  /* cards */
+  --radius-lg:      16px;  /* feature blocks, waitlist card */
+  --radius-xl:      24px;
+  --radius-full:    9999px;  /* chips, badges, waitlist orb */
+
+  /* ============================== SHADOWS ============================== */
+  --shadow-card-rest:  rgba(26, 22, 18, 0.04) 0 1px 2px, rgba(26, 22, 18, 0.06) 0 4px 12px;
+  --shadow-card-hover: rgba(26, 22, 18, 0.06) 0 2px 4px, rgba(26, 22, 18, 0.10) 0 8px 24px;
+  --shadow-cta-rest:   rgba(232, 120, 10, 0.20) 0 4px 14px;
+  --shadow-cta-hover:  rgba(232, 120, 10, 0.32) 0 6px 20px;
+
+  /* ============================== MOTION ============================== */
+  --ease-out:       cubic-bezier(0.16, 0.84, 0.44, 1);
+  --duration-fast:  160ms;
+  --duration-med:   240ms;
+  --duration-slow:  400ms;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ============================================================================
+   Base + semantic element styles
+   ============================================================================ */
 
-html {
-  height: 100%;
-}
+* { box-sizing: border-box; }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+html, body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+::selection { background: var(--color-primary-soft); color: var(--color-primary-ink); }
+
+button { font-family: var(--font-sans); }
+button:focus-visible, input:focus-visible, a:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
-a {
-  color: inherit;
+/* ----------- DEFAULT HTML ELEMENT BINDINGS ----------- */
+h1 { font-family: var(--font-serif); font-size: 56px; font-weight: 300; line-height: 1.08; letter-spacing: -1.4px; color: var(--color-ink); margin: 0 0 var(--space-lg); }
+h2 { font-family: var(--font-serif); font-size: 40px; font-weight: 400; line-height: 1.12; letter-spacing: -0.8px; color: var(--color-ink); margin: 0 0 var(--space-base); }
+h3 { font-family: var(--font-sans);  font-size: 32px; font-weight: 500; line-height: 1.2;  letter-spacing: -0.6px; color: var(--color-ink); margin: 0 0 var(--space-base); }
+h4 { font-family: var(--font-sans);  font-size: 24px; font-weight: 500; line-height: 1.25; letter-spacing: -0.3px; color: var(--color-ink); margin: 0 0 var(--space-sm); }
+h5 { font-family: var(--font-sans);  font-size: 20px; font-weight: 600; line-height: 1.3;  color: var(--color-ink); margin: 0 0 var(--space-sm); }
+h6 { font-family: var(--font-sans);  font-size: 16px; font-weight: 600; line-height: 1.3;  color: var(--color-ink); margin: 0 0 var(--space-xs); }
+p  { font-family: var(--font-sans);  font-size: 16px; font-weight: 400; line-height: 1.55; color: var(--color-body); margin: 0 0 var(--space-base); text-wrap: pretty; }
+small { font-size: 14px; color: var(--color-muted); }
+a    { color: var(--color-primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { font-family: var(--font-mono); font-size: 0.9em; }
+hr   { border: 0; border-top: 1px solid var(--color-hairline); margin: var(--space-xxl) 0; }
+
+/* Sentence case — headlines NEVER title case */
+h1, h2 { text-wrap: balance; }
+
+/* ============================================================================
+   Layout helpers
+   ============================================================================ */
+.inner-wide   { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+.inner-narrow { max-width: 880px;  margin: 0 auto; padding: 0 32px; }
+
+@media (max-width: 640px) {
+  .inner-wide, .inner-narrow { padding: 0 20px; }
+}
+
+/* Page transitions (route change) */
+.page-enter { animation: pageIn 400ms var(--ease-out) both; }
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Hide native scrollbar on horizontal scroll regions */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+/* Featured-in marquee */
+@keyframes pawe-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter { animation: none; }
+  * { scroll-behavior: auto !important; }
+}
+
+/* ============================================================================
+   Top nav (chrome)
+   ============================================================================ */
+.pawe-nav-cta {
+  height: 40px; padding: 0 18px; border-radius: 6px; border: 0; cursor: pointer;
+  background: var(--color-primary); color: #fff;
+  font-family: var(--font-sans); font-size: 14px; font-weight: 500;
+  box-shadow: var(--shadow-cta-rest);
+  white-space: nowrap;
+  display: inline-flex; align-items: center;
+  transition: background var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+}
+.pawe-nav-cta:hover { background: var(--color-primary-hover); box-shadow: var(--shadow-cta-hover); text-decoration: none; }
+.pawe-nav-cta:active { background: var(--color-primary-active); box-shadow: none; }
+
+.pawe-nav-links { display: flex; gap: 28px; }
+.pawe-nav-ghost { background: none; border: 0; cursor: pointer; font-family: var(--font-sans); font-size: 15px; font-weight: 500; white-space: nowrap; transition: color var(--duration-med) var(--ease-out); text-decoration: none; }
+.pawe-nav-ghost:hover { text-decoration: none; }
+
+.pawe-burger {
+  display: none;
+  background: none; border: 0; cursor: pointer; padding: 8px;
+  transition: color var(--duration-med) var(--ease-out);
+}
+
+@media (max-width: 900px) {
+  .pawe-nav-links { display: none; }
+  .pawe-nav-ghost { display: none; }
+  .pawe-burger { display: inline-flex; }
+}
+
+.pawe-mobile-menu {
+  position: fixed; inset: 0; z-index: 60;
+  background: var(--color-canvas);
+  display: flex; flex-direction: column;
+  padding: 20px 24px;
+}
+.pawe-mobile-link {
+  font-family: var(--font-serif); font-size: 34px; font-weight: 400;
+  letter-spacing: -0.8px; color: var(--color-ink);
+  padding: 16px 0; border-bottom: 1px solid var(--color-hairline);
   text-decoration: none;
 }
+.pawe-mobile-link:hover { text-decoration: none; }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+/* ============================================================================
+   Footer (chrome)
+   ============================================================================ */
+.pawe-footer-cta-inner {
+  max-width: 1200px; margin: 0 auto; padding: 96px 32px;
+  display: grid; grid-template-columns: 1.3fr 1fr; gap: 64px; align-items: center;
 }
+.pawe-footer-grid {
+  max-width: 1200px; margin: 0 auto;
+  padding: 72px 32px 40px;
+  display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 48px;
+}
+.pawe-social-link {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink); text-decoration: none;
+  transition: background var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+}
+.pawe-social-link:hover { background: var(--color-ink); color: var(--color-on-dark); border-color: var(--color-ink); }
+
+@media (max-width: 900px) {
+  .pawe-footer-cta-inner { grid-template-columns: 1fr; gap: 40px; padding: 64px 24px; }
+  .pawe-footer-grid { grid-template-columns: 1fr; gap: 32px; padding: 56px 24px 32px; }
+}
+
+/* ============================================================================
+   Forms (shared input affordances)
+   ============================================================================ */
+.pawe-input {
+  height: 48px; border-radius: 6px; border: 1px solid var(--color-hairline);
+  padding: 0 16px; font-family: var(--font-sans); font-size: 15px;
+  color: var(--color-ink); outline: 0; background: var(--color-canvas);
+  transition: border-color var(--duration-fast) var(--ease-out);
+  width: 100%;
+}
+.pawe-textarea {
+  border-radius: 6px; border: 1px solid var(--color-hairline);
+  padding: 12px 16px; font-family: var(--font-sans); font-size: 15px;
+  color: var(--color-ink); outline: 0; background: var(--color-canvas);
+  resize: vertical; min-height: 84px; width: 100%;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+.pawe-input:focus, .pawe-textarea:focus { border-color: var(--color-border-strong); outline: none; }

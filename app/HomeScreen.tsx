@@ -68,6 +68,9 @@ const faqItems = [
 ];
 
 const DEMO_VIDEO = "/assets/photos/FullHypeVideoDemo.mp4";
+// Forward+reverse loop generated from IMG_7355 (1).MOV — plays in place of a
+// static poster on the intro card until the user starts the full demo.
+const INTRO_BOOMERANG = "/assets/photos/intro-boomerang.mp4";
 // Demo video timestamps: 0–7s shows step 1 (Align), 7–14s step 2 (Snap),
 // 14–21s step 3 (Go). Past 21s the last step stays highlighted.
 const STEP_SECONDS = 7;
@@ -82,6 +85,22 @@ export default function HomeScreen() {
   // Intro card: click-to-play the full hype demo with sound + controls.
   const introVideoRef = useRef<HTMLVideoElement | null>(null);
   const [introStarted, setIntroStarted] = useState(false);
+
+  // The idle-state boomerang autoplays muted, but must hold still for users
+  // who ask the OS for reduced motion.
+  const boomerangRef = useRef<HTMLVideoElement | null>(null);
+  useEffect(() => {
+    const v = boomerangRef.current;
+    if (!v) return;
+    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const apply = () => {
+      if (mql.matches) v.pause();
+      else v.play().catch(() => {});
+    };
+    apply();
+    mql.addEventListener("change", apply);
+    return () => mql.removeEventListener("change", apply);
+  }, []);
 
   // Sound-on video shouldn't keep talking once scrolled away; pause it
   // off-screen and leave resuming to the user (it was user-initiated).
@@ -271,6 +290,20 @@ export default function HomeScreen() {
                   aria-label="PAWE demo video"
                 />
                 {!introStarted && (
+                  <video
+                    ref={boomerangRef}
+                    src={INTRO_BOOMERANG}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="auto"
+                    aria-hidden="true"
+                    tabIndex={-1}
+                    style={hsl.videoTag}
+                  />
+                )}
+                {!introStarted && (
                   <button
                     type="button"
                     aria-label="Play demo"
@@ -384,7 +417,9 @@ export default function HomeScreen() {
               <button
                 type="button"
                 aria-label={attachPlaying ? "Pause attach demo" : "Play attach demo"}
-                style={hsl.attachVideoToggle}
+                // The play triangle needs an optical nudge right; the pause
+                // glyph is symmetric and must stay dead-center.
+                style={{ ...hsl.attachVideoToggle, paddingLeft: attachPlaying ? 0 : 2 }}
                 onClick={() => {
                   const v = attachVideoRef.current;
                   if (!v) return;
@@ -500,15 +535,17 @@ export default function HomeScreen() {
           </Reveal>
         </div>
         <div style={hsl.marqueeViewport}>
+          {/* 4 copies so the loop seam (-25% = one group width) never runs out
+              of track, even on viewports wider than one logo group. Eager
+              loading keeps the group at full width from the first frame. */}
           <div className="home-marquee-track" style={hsl.marqueeTrack}>
-            {[...Array(2)].map((_, dup) => (
-              <div key={dup} style={hsl.marqueeGroup} aria-hidden={dup === 1 ? "true" : undefined}>
+            {[...Array(4)].map((_, dup) => (
+              <div key={dup} style={hsl.marqueeGroup} aria-hidden={dup > 0 ? "true" : undefined}>
                 {featuredLogos.map((l) => (
                   <img
                     key={l.src}
                     src={l.src}
-                    alt={dup === 1 ? "" : l.alt}
-                    loading="lazy"
+                    alt={dup > 0 ? "" : l.alt}
                     decoding="async"
                     style={hsl.featuredLogo}
                   />
@@ -572,6 +609,9 @@ export default function HomeScreen() {
         @media (max-width: 900px) {
           /* Mobile browser chrome makes 100vh jumpy; svh tracks the visible viewport. */
           .home-hero { min-height: 100vh !important; min-height: 100svh !important; }
+          /* Same px distance per cycle, half the time — the marquee reads too
+             slow on narrow screens at the desktop pace. */
+          .home-marquee-track { animation-duration: 18s !important; }
           .home-intro-grid { grid-template-columns: minmax(0, 1fr) !important; }
           .home-spec-strip { grid-template-columns: minmax(0, 1fr) !important; }
           .home-spec-cell { border-right: 0 !important; border-bottom: 1px solid var(--color-hairline-soft); }
@@ -983,7 +1023,6 @@ const hsl: Record<string, CSSProperties> = {
     color: "var(--color-on-ink)",
     display: "grid", placeItems: "center",
     cursor: "pointer",
-    paddingLeft: 2,
   },
 
   // 6. Challenge cards — compact horizontal

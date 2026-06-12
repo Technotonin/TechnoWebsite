@@ -320,29 +320,6 @@ export default function WaitlistScreen() {
         </div>
       </section>
 
-      {/* SOCIAL PROOF FOOTER */}
-      <section className="wl-band" style={ws.socialSection}>
-        <div style={ws.innerNarrow}>
-          <Reveal>
-            <div className="wl-social-card" style={ws.socialCard}>
-              <div style={ws.socialQuoteMark} aria-hidden="true">
-                &ldquo;
-              </div>
-              <p className="wl-social-quote" style={ws.socialQuote}>
-                I signed up on a Tuesday. A founder called me on Friday. We talked for an hour about my
-                chair and my commute. That&rsquo;s not a thing a $30,000 powered-chair company does.
-              </p>
-              <div style={ws.socialAttr}>
-                <div>
-                  <div style={ws.socialName}>Beta user family member</div>
-                  <div style={ws.socialLoc}>Pilot 01 &middot; Providence, RI</div>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
       {/* Page-scoped responsive rules (prototype is desktop-only) */}
       <style>{`
         .wl-hero-grid { grid-template-columns: 1.1fr 1fr; }
@@ -372,8 +349,6 @@ export default function WaitlistScreen() {
           .wl-toggle-row { flex-direction: column; gap: 10px !important; }
           .wl-toggle-row button { flex: none !important; width: 100%; height: 48px !important; }
           .wl-form-card { padding: 28px 22px !important; }
-          .wl-social-card { padding: 32px 28px !important; }
-          .wl-social-quote { font-size: 22px !important; }
           .wl-hero { padding: 48px 0 72px !important; }
           .wl-band { padding: 72px 0 !important; }
         }
@@ -432,13 +407,4 @@ const ws: Record<string, CSSProperties> = {
 
   // FAQ
   faqSection: { padding: "120px 0", background: "var(--color-canvas)" },
-
-  // Social
-  socialSection: { padding: "120px 0", background: "var(--color-surface-soft)" },
-  socialCard: { background: "var(--color-ink)", borderRadius: 16, padding: 56, color: "var(--color-on-dark)" },
-  socialQuoteMark: { fontFamily: "var(--font-serif)", fontSize: 80, lineHeight: 0.6, color: "var(--color-primary)", marginBottom: 24, height: 36 },
-  socialQuote: { fontFamily: "var(--font-serif)", fontSize: 28, fontWeight: 300, fontStyle: "italic", lineHeight: 1.35, color: "var(--color-on-dark)", margin: "0 0 32px", maxWidth: 720, textWrap: "balance" },
-  socialAttr: { display: "flex", alignItems: "center", gap: 16, paddingTop: 24, borderTop: "1px solid rgba(245,244,240,0.18)" },
-  socialName: { fontFamily: "var(--font-sans)", fontSize: 16, fontWeight: 600, color: "var(--color-on-dark)" },
-  socialLoc: { fontFamily: "var(--font-sans)", fontSize: 13, color: "rgba(245,244,240,0.6)", marginTop: 2 },
 };

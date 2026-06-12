@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# raw phone footage (source for intro-boomerang.mp4, not served)
+public/assets/photos/IMG_7355*.MOV

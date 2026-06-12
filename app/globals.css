@@ -166,10 +166,11 @@ h1, h2 { text-wrap: balance; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
 
-/* Featured-in marquee */
+/* Featured-in marquee — track holds 4 identical groups, so -25% is exactly
+   one group width and the loop restart is seamless */
 @keyframes pawe-marquee {
   from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  to   { transform: translateX(-25%); }
 }
 
 @media (prefers-reduced-motion: reduce) {

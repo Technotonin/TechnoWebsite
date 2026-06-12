@@ -33,7 +33,7 @@ export default function Footer() {
               <span style={footStyles.dot}></span>
               Power on demand
             </div>
-            <h2 style={footStyles.featureH}>
+            <h2 className="pawe-footer-h" style={footStyles.featureH}>
               Your Wheelchair.
               <br />
               Powered.
@@ -43,10 +43,10 @@ export default function Footer() {
             </div>
           </div>
           <div style={footStyles.ctaRight}>
-            <div style={footStyles.phoneCard}>
+            <div className="pawe-footer-phonecard" style={footStyles.phoneCard}>
               <div style={footStyles.phoneEyebrow}>Got questions?</div>
               <div style={footStyles.phoneLine}>Phone a founder</div>
-              <a href="tel:5083331435" style={footStyles.phoneNumber}>
+              <a href="tel:5083331435" className="pawe-footer-phone-number" style={footStyles.phoneNumber}>
                 508&nbsp;·&nbsp;333&nbsp;·&nbsp;1435
               </a>
               <div style={footStyles.phoneNote}>Call any time!</div>
@@ -64,12 +64,12 @@ export default function Footer() {
               <span style={{ color: "var(--color-primary)", fontWeight: 600 }}>Empowering</span> Lives
             </div>
           </div>
-          <div style={footStyles.contactCol}>
+          <div className="pawe-footer-contact-col" style={footStyles.contactCol}>
             <div style={footStyles.colHead}>Contact</div>
-            <a href="mailto:Info@technotonin.com" style={footStyles.contactLine}>
+            <a href="mailto:Info@technotonin.com" className="pawe-footer-contact-line" style={footStyles.contactLine}>
               Info@technotonin.com
             </a>
-            <a href="tel:5083331435" style={footStyles.contactLine}>
+            <a href="tel:5083331435" className="pawe-footer-contact-line" style={footStyles.contactLine}>
               508 · 333 · 1435
             </a>
           </div>
@@ -85,10 +85,10 @@ export default function Footer() {
           </div>
         </div>
 
-        <div style={footStyles.legal}>
+        <div className="pawe-footer-legal" style={footStyles.legal}>
           <span>© 2026 Technotonin Industries LLC</span>
           <span style={{ flex: 1 }}></span>
-          <span style={footStyles.disclaimer}>
+          <span className="pawe-footer-disclaimer" style={footStyles.disclaimer}>
             PAWE is pre-clearance. Not currently available for purchase. This site is for informational purposes.
           </span>
         </div>

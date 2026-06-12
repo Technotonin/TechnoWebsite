@@ -360,8 +360,8 @@ export default function WaitlistScreen() {
           .wl-hero-grid { grid-template-columns: 1fr; }
           .wl-benefits { grid-template-columns: 1fr; }
           .wl-sticky { position: static; }
-          .wl-hero { padding: 56px 0 88px !important; }
-          .wl-band { padding: 88px 0 !important; }
+          .wl-hero { padding: 56px 0 72px !important; }
+          .wl-band { padding: 72px 0 !important; }
         }
 
         @media (max-width: 640px) {
@@ -369,12 +369,17 @@ export default function WaitlistScreen() {
           .wl-hero-grid h1 { font-size: 42px !important; letter-spacing: -1.2px !important; }
           .wl-faq-head h2 { font-size: 34px !important; letter-spacing: -0.7px !important; }
           .wl-form-grid2 { grid-template-columns: 1fr; }
-          .wl-toggle-row { flex-direction: column; }
+          .wl-toggle-row { flex-direction: column; gap: 10px !important; }
+          .wl-toggle-row button { flex: none !important; width: 100%; height: 48px !important; }
           .wl-form-card { padding: 28px 22px !important; }
-          .wl-social-card { padding: 40px 28px !important; }
+          .wl-social-card { padding: 32px 28px !important; }
           .wl-social-quote { font-size: 22px !important; }
           .wl-hero { padding: 48px 0 72px !important; }
           .wl-band { padding: 72px 0 !important; }
+        }
+
+        @media (max-width: 480px) {
+          .wl-form-card { padding: 24px 20px !important; }
         }
       `}</style>
     </main>

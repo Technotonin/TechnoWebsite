@@ -179,7 +179,7 @@ export default function HomeScreen() {
   return (
     <main>
       {/* ============================= 1. HERO ============================= */}
-      <section ref={heroRef} style={hsl.heroShell}>
+      <section ref={heroRef} className="home-hero" style={hsl.heroShell}>
         <div
           style={{
             ...hsl.heroImage,
@@ -194,16 +194,17 @@ export default function HomeScreen() {
             <span style={{ ...hsl.heroWordmark, display: "block" }} data-hero-seq>
               PAWE
             </span>
-            <span style={{ ...hsl.heroExpand, display: "block" }} data-hero-seq>
+            <span className="home-hero-acronym" style={{ ...hsl.heroExpand, display: "block" }} data-hero-seq>
               Portable Affordable Wheelchair Enhancer
             </span>
           </h1>
           <div style={hsl.heroTagline} data-hero-seq>
             Powering wheelchairs. Empowering lives.
           </div>
-          <div style={hsl.heroCtas} data-hero-seq>
+          <div className="home-hero-ctas" style={hsl.heroCtas} data-hero-seq>
             <Link
               href="/waitlist"
+              className="home-hero-cta"
               style={{
                 ...hsl.heroCtaWhite,
                 display: "inline-flex",
@@ -218,7 +219,7 @@ export default function HomeScreen() {
       </section>
 
       {/* ===================== 2. BIG TYPE INTRO + VIDEO ===================== */}
-      <section style={hsl.introSection}>
+      <section className="home-intro-section" style={hsl.introSection}>
         <div style={hsl.innerWide}>
           <div className="home-intro-grid" style={hsl.introGrid}>
             <Reveal selector=".bh-line" stagger={0.1} style={hsl.bigHeadlineWrap}>
@@ -273,6 +274,7 @@ export default function HomeScreen() {
                   <button
                     type="button"
                     aria-label="Play demo"
+                    className="home-video-play"
                     style={hsl.videoPlay}
                     onClick={() => {
                       setIntroStarted(true);
@@ -317,7 +319,7 @@ export default function HomeScreen() {
       </section>
 
       {/* ================== 4. THREE-STEP ATTACH + VIDEO ================== */}
-      <section style={hsl.attachSection}>
+      <section className="home-attach-section" style={hsl.attachSection}>
         <div style={hsl.innerWide}>
           <Reveal style={hsl.attachHeading}>
             <div style={hsl.eyebrow}>
@@ -420,7 +422,7 @@ export default function HomeScreen() {
       <div style={{ height: 32 }}></div>
 
       {/* ====================== 6. CHALLENGE CARDS ====================== */}
-      <section style={hsl.challengeSection}>
+      <section className="home-challenge-section" style={hsl.challengeSection}>
         <div style={hsl.innerWide}>
           <Reveal style={{ maxWidth: 600, marginBottom: 48 }}>
             <h2
@@ -455,7 +457,7 @@ export default function HomeScreen() {
       </section>
 
       {/* ================== 7. DARK BAND — BUILT WITH USERS ================== */}
-      <section style={hsl.darkBand2}>
+      <section className="home-dark-band" style={hsl.darkBand2}>
         <div style={hsl.innerWide}>
           <Reveal style={{ maxWidth: 720, margin: "0 auto", textAlign: "center", marginBottom: 64 }}>
             <h2 className="home-dark-h2" style={{ ...hsl.h2EditorialDark, fontSize: 52 }}>
@@ -491,7 +493,7 @@ export default function HomeScreen() {
       </section>
 
       {/* ================== 8. AS FEATURED IN (marquee) ================== */}
-      <section style={hsl.featuredSection}>
+      <section className="home-featured-section" style={hsl.featuredSection}>
         <div style={hsl.innerWide}>
           <Reveal>
             <div style={hsl.featuredEyebrow}>As featured in</div>
@@ -518,7 +520,7 @@ export default function HomeScreen() {
       </section>
 
       {/* ============================= 9. FAQ ============================= */}
-      <section style={hsl.faqSection}>
+      <section className="home-faq-section" style={hsl.faqSection}>
         <div style={{ maxWidth: 880, margin: "0 auto", padding: "0 32px" }}>
           <Reveal>
             <SectionHeading
@@ -527,6 +529,7 @@ export default function HomeScreen() {
                 <>
                   If yours isn&rsquo;t here, write us, and we&rsquo;ll get back to you ASAP!
                   <span
+                    className="home-fda-note"
                     style={{
                       display: "block",
                       marginTop: 24,
@@ -567,18 +570,45 @@ export default function HomeScreen() {
           .home-intro-grid { gap: 40px !important; }
         }
         @media (max-width: 900px) {
-          .home-intro-grid { grid-template-columns: 1fr !important; }
-          .home-spec-strip { grid-template-columns: 1fr !important; }
+          /* Mobile browser chrome makes 100vh jumpy; svh tracks the visible viewport. */
+          .home-hero { min-height: 100vh !important; min-height: 100svh !important; }
+          .home-intro-grid { grid-template-columns: minmax(0, 1fr) !important; }
+          .home-spec-strip { grid-template-columns: minmax(0, 1fr) !important; }
           .home-spec-cell { border-right: 0 !important; border-bottom: 1px solid var(--color-hairline-soft); }
           .home-spec-cell:last-child { border-bottom: 0; }
-          .home-attach-grid { grid-template-columns: 1fr !important; }
-          .home-attach-video { position: static !important; }
-          .home-challenge-grid { grid-template-columns: 1fr !important; }
-          .home-real-grid { grid-template-columns: 1fr !important; }
+          .home-attach-grid { grid-template-columns: minmax(0, 1fr) !important; }
+          /* Demo video leads on mobile; the steps scroll beneath it. */
+          .home-attach-video { position: static !important; order: -1; }
+          .home-challenge-grid { grid-template-columns: minmax(0, 1fr) !important; }
+          .home-real-grid { grid-template-columns: minmax(0, 1fr) !important; }
         }
         @media (max-width: 640px) {
+          /* Section rhythm: 56-72px vertical on phones. */
+          .home-intro-section { padding: 64px 0 56px !important; }
+          .home-attach-section { padding: 64px 0 0 !important; }
+          .home-challenge-section { padding: 0 0 64px !important; }
+          .home-dark-band { padding: 72px 0 !important; }
+          .home-featured-section { padding: 56px 0 !important; }
+          .home-faq-section { padding: 72px 0 !important; }
+          .home-spec-strip { margin-top: 64px !important; }
+          .home-spec-cell { padding: 28px 24px !important; }
+          /* Hero: full-width thumb-reach CTA, tighter acronym tracking (2 clean lines). */
+          .home-hero-ctas { width: 100% !important; }
+          .home-hero-cta { width: 100% !important; max-width: 360px !important; justify-content: center !important; }
+          .home-hero-acronym { letter-spacing: 0.22em !important; }
+          .home-video-play { width: 64px !important; height: 64px !important; }
+          /* Sticky demo card: pins below the header while the three steps scroll
+             under it, so the playback-synced highlight reads like a storyboard.
+             (Wins over the 900px static rule — later source order, same specificity.) */
+          .home-attach-video {
+            position: sticky !important;
+            top: 84px !important;
+            z-index: 5;
+            box-shadow: 0 26px 50px -18px rgba(26,22,18,0.4), 0 10px 24px -10px rgba(26,22,18,0.25) !important;
+          }
           .home-challenge-h2 { font-size: 36px !important; }
           .home-dark-h2 { font-size: 38px !important; }
+          .home-fda-note { font-size: 17px !important; }
         }
       `}</style>
     </main>

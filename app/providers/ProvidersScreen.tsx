@@ -153,6 +153,7 @@ export default function ProvidersScreen() {
                         <button
                           key={r.id}
                           type="button"
+                          className="pv-toggle-btn"
                           aria-pressed={form.role === r.id}
                           onClick={() => upd("role", r.id)}
                           style={{
@@ -266,12 +267,14 @@ export default function ProvidersScreen() {
         }
         @media (max-width: 900px) {
           .providers-hero-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
+          .providers-hero-grid > * { min-width: 0; }
         }
         @media (max-width: 640px) {
           .providers-hero { padding: 56px 0 64px !important; }
           .providers-hero-h1 { font-size: 40px !important; letter-spacing: -1.2px !important; }
           .providers-request-card { padding: 24px 20px !important; }
-          .providers-faq { padding: 80px 0 !important; }
+          .providers-faq { padding: 72px 0 !important; }
+          .pv-toggle-btn { height: 44px !important; }
         }
       `}</style>
     </main>

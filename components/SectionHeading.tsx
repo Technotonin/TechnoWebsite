@@ -45,7 +45,7 @@ export default function SectionHeading({
       <h2
         style={{
           fontFamily: "var(--font-serif)",
-          fontSize: 44,
+          fontSize: "clamp(32px, 8.5vw, 44px)",
           fontWeight: 400,
           lineHeight: 1.1,
           letterSpacing: "-1px",

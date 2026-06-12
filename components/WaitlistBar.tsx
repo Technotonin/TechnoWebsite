@@ -26,7 +26,7 @@ export default function WaitlistBar({ tone = "amber", placeholder, label, sub }:
 
   if (submitted) {
     return (
-      <div style={{ ...waitStyles.bar, padding: "0 24px" }}>
+      <div className="pawe-wl-bar" style={{ ...waitStyles.bar, padding: "0 24px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ width: 28, height: 28, borderRadius: "50%", background: "var(--color-success)", display: "grid", placeItems: "center" }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -43,12 +43,13 @@ export default function WaitlistBar({ tone = "amber", placeholder, label, sub }:
   }
 
   return (
-    <form style={waitStyles.bar} onSubmit={onSubmit}>
-      <div style={waitStyles.left}>
+    <form className="pawe-wl-bar" style={waitStyles.bar} onSubmit={onSubmit}>
+      <div className="pawe-wl-left" style={waitStyles.left}>
         <div style={waitStyles.label}>{lbl}</div>
         <div style={waitStyles.sub}>{subL}</div>
       </div>
       <input
+        className="pawe-wl-input"
         type="email"
         aria-label="Email address"
         placeholder={ph}
@@ -56,7 +57,7 @@ export default function WaitlistBar({ tone = "amber", placeholder, label, sub }:
         onChange={(e) => setEmail(e.target.value)}
         style={waitStyles.input}
       />
-      <button type="submit" aria-label="Submit" style={{ ...waitStyles.orb, background: accent, boxShadow: glow }}>
+      <button type="submit" aria-label="Submit" className="pawe-wl-orb" style={{ ...waitStyles.orb, background: accent, boxShadow: glow }}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M5 12h14M13 6l6 6-6 6" />
         </svg>

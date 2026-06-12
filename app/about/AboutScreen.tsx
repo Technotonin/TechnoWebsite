@@ -45,7 +45,7 @@ export default function AboutScreen() {
   return (
     <main>
       {/* ============================= 0. HERO (full-bleed) ============================= */}
-      <section ref={heroRef} style={hero.shell}>
+      <section ref={heroRef} className="about-hero" style={hero.shell}>
         <div
           style={{
             ...hero.image,
@@ -54,7 +54,7 @@ export default function AboutScreen() {
           }}
         ></div>
         <div style={hero.scrim}></div>
-        <div style={hero.contentWrap}>
+        <div className="about-hero-wrap" style={hero.contentWrap}>
           <div style={hero.content}>
             <div style={hero.eyebrow} data-hero-rise>
               <span style={hero.dot}></span>About
@@ -91,7 +91,7 @@ export default function AboutScreen() {
               <div style={as.eyebrow}>
                 <span style={as.dot}></span>Our mission
               </div>
-              <h2 style={as.h2}>The mission.</h2>
+              <h2 className="about-h2" style={as.h2}>The mission.</h2>
               <p style={as.bodyP}>
                 At <strong>Technotonin Industries</strong>, we believe mobility should never be a barrier to
                 independence. Our mission is to empower wheelchair users with affordable, portable, and
@@ -116,8 +116,8 @@ export default function AboutScreen() {
       {/* ============================= 2. THE TEAM ============================= */}
       <section className="about-section" style={as.darkSection}>
         <div style={as.innerWide}>
-          <Reveal style={{ textAlign: "center", marginBottom: 64 }}>
-            <h2 style={as.h2Dark}>The team.</h2>
+          <Reveal className="about-band-heading" style={{ textAlign: "center", marginBottom: 64 }}>
+            <h2 className="about-h2-dark" style={as.h2Dark}>The team.</h2>
           </Reveal>
           <Reveal className="about-team-pair" style={as.teamPair} selector=":scope > *">
             {team.map((t) => (
@@ -125,6 +125,7 @@ export default function AboutScreen() {
                 <div
                   role="img"
                   aria-label={t.name}
+                  className="about-team-photo"
                   style={{ ...as.teamPhotoLarge, backgroundImage: `url('${t.photo}')` }}
                 ></div>
                 <div style={as.teamNameDark}>{t.name}</div>
@@ -134,8 +135,11 @@ export default function AboutScreen() {
           </Reveal>
 
           {/* Mentors */}
-          <Reveal style={{ textAlign: "center", marginTop: 96, marginBottom: 64 }}>
-            <h2 style={as.h2Dark}>Mentors.</h2>
+          <Reveal
+            className="about-band-heading about-mentors-heading"
+            style={{ textAlign: "center", marginTop: 96, marginBottom: 64 }}
+          >
+            <h2 className="about-h2-dark" style={as.h2Dark}>Mentors.</h2>
           </Reveal>
           <Reveal className="about-team-row" style={as.teamRow} selector=":scope > *">
             {mentorsRow1.map((t) => (
@@ -143,6 +147,7 @@ export default function AboutScreen() {
                 <div
                   role="img"
                   aria-label={t.name}
+                  className="about-team-photo"
                   style={{ ...as.teamPhotoLarge, backgroundImage: `url('${t.photo}')` }}
                 ></div>
                 <div style={as.teamNameDark}>{t.name}</div>
@@ -160,6 +165,7 @@ export default function AboutScreen() {
                 <div
                   role="img"
                   aria-label={t.name}
+                  className="about-team-photo"
                   style={{ ...as.teamPhotoLarge, backgroundImage: `url('${t.photo}')` }}
                 ></div>
                 <div style={as.teamNameDark}>{t.name}</div>
@@ -169,7 +175,7 @@ export default function AboutScreen() {
           </Reveal>
 
           {/* Closing line + CTA */}
-          <Reveal style={as.familyBlock}>
+          <Reveal className="about-family-block" style={as.familyBlock}>
             <p style={as.familyP}>
               And countless others who are part of the <strong>Technotonin Family</strong>, helping shape
               PAWE into a solution that empowers millions.
@@ -202,7 +208,7 @@ export default function AboutScreen() {
               <div style={as.eyebrow}>
                 <span style={as.dot}></span>The name
               </div>
-              <h2 style={as.h2}>Why our name?</h2>
+              <h2 className="about-h2" style={as.h2}>Why our name?</h2>
               <p style={as.bodyP}>
                 <strong>Technotonin</strong> is a fusion of <strong>&ldquo;Technology&rdquo;</strong> and{" "}
                 <strong>&ldquo;Serotonin&rdquo;</strong>, representing our mission to create innovative assistive
@@ -244,6 +250,10 @@ export default function AboutScreen() {
           background: var(--color-primary-active) !important;
           box-shadow: none !important;
         }
+        /* Mobile browsers: size the hero to the small viewport (URL bar visible).
+           Browsers without svh support drop these rules and keep the inline 100vh. */
+        .about-hero { min-height: 100svh !important; }
+        .about-hero-wrap { min-height: 100svh !important; }
         @media (max-width: 1024px) {
           .about-mission-grid, .about-name-grid { gap: 56px !important; }
         }
@@ -258,8 +268,17 @@ export default function AboutScreen() {
         @media (max-width: 640px) {
           .about-hero-h1 { font-size: 44px !important; letter-spacing: -1.4px !important; }
           .about-hero-sub { font-size: 17px !important; }
+          .about-hero-wrap { padding: 0 32px 56px !important; }
+          .about-h2 { font-size: 36px !important; letter-spacing: -0.8px !important; }
+          .about-h2-dark { font-size: 36px !important; letter-spacing: -0.9px !important; }
           .about-section { padding: 72px 0 !important; }
-          .about-name-visual { padding: 56px 24px !important; }
+          .about-band-heading { margin-bottom: 40px !important; }
+          .about-mentors-heading { margin-top: 64px !important; }
+          .about-team-pair { flex-direction: column; align-items: center; gap: 40px !important; }
+          .about-team-row { row-gap: 40px !important; }
+          .about-team-photo { width: 120px !important; height: 120px !important; }
+          .about-family-block { margin-top: 64px !important; }
+          .about-name-visual { padding: 36px 24px !important; gap: 28px !important; }
           .about-name-wordmark { font-size: 44px !important; letter-spacing: -1.2px !important; }
           .about-name-formula { flex-wrap: wrap; justify-content: center; }
         }

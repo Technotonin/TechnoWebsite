@@ -127,7 +127,11 @@ export default function InvestorsScreen() {
               seconds &mdash; no dealer, no tools, no new chair.
             </p>
             <div style={inv.heroCtas} data-hero-line>
-              <button style={inv.ctaPrimary} onClick={scrollToForm}>
+              <button
+                style={inv.ctaPrimary}
+                className="inv-cta-primary"
+                onClick={scrollToForm}
+              >
                 Request the pitch deck
               </button>
             </div>
@@ -214,7 +218,10 @@ export default function InvestorsScreen() {
             ))}
           </Reveal>
 
-          <Reveal style={{ textAlign: "center", marginTop: 96, marginBottom: 48 }}>
+          <Reveal
+            style={{ textAlign: "center", marginTop: 96, marginBottom: 48 }}
+            className="inv-advisors-head"
+          >
             <h2 style={inv.h2Dark} className="inv-h2-dark">
               Mentors &amp; advisors.
             </h2>
@@ -274,7 +281,11 @@ export default function InvestorsScreen() {
                 a shoestring budget.
               </p>
               <div style={inv.askCtas}>
-                <button style={inv.ctaPrimary} onClick={scrollToForm}>
+                <button
+                  style={inv.ctaPrimary}
+                  className="inv-cta-primary"
+                  onClick={scrollToForm}
+                >
                   Request the pitch deck
                 </button>
               </div>
@@ -383,7 +394,11 @@ export default function InvestorsScreen() {
                   />
                 </div>
                 <div style={inv.formActions}>
-                  <button type="submit" style={inv.ctaPrimary}>
+                  <button
+                    type="submit"
+                    style={inv.ctaPrimary}
+                    className="inv-cta-primary"
+                  >
                     Send request
                   </button>
                   <div style={inv.formInline}>
@@ -446,16 +461,21 @@ export default function InvestorsScreen() {
           .inv-ask-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
           .inv-team-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
           .inv-team-pair { gap: 56px !important; }
+          .inv-why-row > *, .inv-ask-grid > *, .inv-team-grid > * { min-width: 0; }
         }
         @media (max-width: 640px) {
-          .inv-hero { padding: 96px 0 72px !important; }
-          .inv-section { padding: 88px 0 !important; }
+          .inv-hero { padding: 72px 0 56px !important; }
+          .inv-section { padding: 64px 0 !important; }
           .inv-hero-h1 { font-size: 42px !important; letter-spacing: -1.2px !important; }
           .inv-h2 { font-size: 36px !important; }
           .inv-h2-dark { font-size: 38px !important; }
           .inv-form-grid2 { grid-template-columns: 1fr !important; }
+          .inv-form-grid2 > * { min-width: 0; }
           .inv-form-card { padding: 28px 20px !important; }
-          .inv-seen-row { gap: 32px 40px !important; }
+          .inv-seen-row { gap: 20px !important; }
+          .inv-team-pair { flex-direction: column !important; align-items: center !important; gap: 40px !important; }
+          .inv-advisors-head { margin-top: 64px !important; }
+          .inv-cta-primary { width: 100% !important; max-width: 360px !important; }
         }
       `}</style>
     </main>

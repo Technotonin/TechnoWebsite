@@ -173,6 +173,11 @@ h1, h2 { text-wrap: balance; }
   to   { transform: translateX(-25%); }
 }
 
+/* Submit-button spinner */
+@keyframes pawe-spin {
+  to { transform: rotate(360deg); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page-enter { animation: none; }
   * { scroll-behavior: auto !important; }

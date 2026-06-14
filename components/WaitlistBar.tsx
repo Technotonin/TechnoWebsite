@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, type CSSProperties } from "react";
+import { usePathname } from "next/navigation";
+import { submitLead } from "@/lib/leads/client";
+import Honeypot from "@/components/Honeypot";
 
 type WaitlistBarProps = {
   tone?: "amber" | "horizon";
@@ -10,12 +13,27 @@ type WaitlistBarProps = {
 };
 
 export default function WaitlistBar({ tone = "amber", placeholder, label, sub }: WaitlistBarProps) {
+  const pathname = usePathname();
   const [email, setEmail] = useState("");
+  const [hp, setHp] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.includes("@")) setSubmitted(true);
+    if (!email.includes("@") || pending) return;
+    setPending(true);
+    setError(null);
+    const res = await submitLead({
+      type: "subscribe",
+      email,
+      source: pathname,
+      company_website: hp,
+    });
+    setPending(false);
+    if (res.ok) setSubmitted(true);
+    else setError(res.error ?? "Something went wrong.");
   };
 
   const accent = tone === "horizon" ? "var(--color-horizon)" : "var(--color-primary)";
@@ -46,8 +64,9 @@ export default function WaitlistBar({ tone = "amber", placeholder, label, sub }:
     <form className="pawe-wl-bar" style={waitStyles.bar} onSubmit={onSubmit}>
       <div className="pawe-wl-left" style={waitStyles.left}>
         <div style={waitStyles.label}>{lbl}</div>
-        <div style={waitStyles.sub}>{subL}</div>
+        <div style={waitStyles.sub}>{error ?? subL}</div>
       </div>
+      <Honeypot value={hp} onChange={setHp} />
       <input
         className="pawe-wl-input"
         type="email"
@@ -56,11 +75,24 @@ export default function WaitlistBar({ tone = "amber", placeholder, label, sub }:
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         style={waitStyles.input}
+        disabled={pending}
       />
-      <button type="submit" aria-label="Submit" className="pawe-wl-orb" style={{ ...waitStyles.orb, background: accent, boxShadow: glow }}>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M5 12h14M13 6l6 6-6 6" />
-        </svg>
+      <button
+        type="submit"
+        aria-label="Submit"
+        className="pawe-wl-orb"
+        style={{ ...waitStyles.orb, background: accent, boxShadow: glow, opacity: pending ? 0.7 : 1 }}
+        disabled={pending}
+      >
+        {pending ? (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true" style={{ animation: "pawe-spin 0.7s linear infinite" }}>
+            <path d="M21 12a9 9 0 1 1-6.2-8.6" />
+          </svg>
+        ) : (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        )}
       </button>
     </form>
   );

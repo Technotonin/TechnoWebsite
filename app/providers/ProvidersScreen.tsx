@@ -4,6 +4,8 @@ import { useState, type CSSProperties, type FormEvent } from "react";
 import SectionHeading from "@/components/SectionHeading";
 import FAQ from "@/components/FAQ";
 import Reveal from "@/components/Reveal";
+import Honeypot from "@/components/Honeypot";
+import { submitLead } from "@/lib/leads/client";
 
 // =============================== FOR PROVIDERS ===============================
 // Horizon-blue scoped page — the only page where horizon blue is the accent.
@@ -47,11 +49,31 @@ export default function ProvidersScreen() {
     comment: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [hp, setHp] = useState("");
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const upd = (k: keyof typeof form, v: string) =>
     setForm((f) => ({ ...f, [k]: v }));
-  const submit = (e: FormEvent<HTMLFormElement>) => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (pending) return;
+    setPending(true);
+    setError(null);
+    const res = await submitLead({
+      type: "provider",
+      email: form.email,
+      name: form.name,
+      source: "/providers",
+      company_website: hp,
+      data: {
+        "Clinic / practice / supplier": form.clinic,
+        Role: form.role.toUpperCase(),
+        Question: form.comment,
+      },
+    });
+    setPending(false);
+    if (res.ok) setSubmitted(true);
+    else setError(res.error ?? "Something went wrong.");
   };
 
   return (
@@ -102,6 +124,7 @@ export default function ProvidersScreen() {
 
               {!submitted && (
                 <form style={ps.formBody} onSubmit={submit}>
+                  <Honeypot value={hp} onChange={setHp} />
                   <div style={ps.formRow}>
                     <label htmlFor="pv-name" style={ps.formLabel}>Full name</label>
                     <input
@@ -192,9 +215,14 @@ export default function ProvidersScreen() {
                       rows={3}
                     />
                   </div>
-                  <button type="submit" style={ps.formCta}>
-                    Send
+                  <button type="submit" style={{ ...ps.formCta, opacity: pending ? 0.7 : 1 }} disabled={pending}>
+                    {pending ? "Sending…" : "Send"}
                   </button>
+                  {error && (
+                    <div role="alert" style={ps.formError}>
+                      {error}
+                    </div>
+                  )}
                   <div style={ps.formNote}>
                     No payment, no sales pitch. A founder reads every request.
                   </div>
@@ -311,6 +339,7 @@ const ps: Record<string, CSSProperties> = {
   toggleBtn: { flex: 1, height: 42, borderRadius: 6, border: "1px solid var(--color-hairline)", fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 600, cursor: "pointer", padding: "0 8px", letterSpacing: 0.4 },
   formCta: { marginTop: 8, height: 50, borderRadius: 6, border: 0, background: "var(--color-horizon)", color: "var(--color-on-horizon)", fontFamily: "var(--font-sans)", fontSize: 15, fontWeight: 500, cursor: "pointer" },
   formNote: { fontFamily: "var(--font-sans)", fontSize: 12, color: "var(--color-muted)", marginTop: 4, textAlign: "center", lineHeight: 1.5 },
+  formError: { fontFamily: "var(--font-sans)", fontSize: 13, color: "var(--color-error)", marginTop: 4, textAlign: "center", lineHeight: 1.5 },
 
   // Success
   successBody: { padding: "8px 0 8px", textAlign: "center" },

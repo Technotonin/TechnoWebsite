@@ -4,6 +4,8 @@ import { useState, type CSSProperties } from "react";
 import FAQ from "@/components/FAQ";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
+import Honeypot from "@/components/Honeypot";
+import { submitLead } from "@/lib/leads/client";
 
 // =============================== JOIN THE WAITLIST ===============================
 
@@ -68,12 +70,40 @@ export default function WaitlistScreen() {
     comment: "",
     role: "user",
   });
+  const [hp, setHp] = useState("");
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const upd = (k: keyof FormState, v: string) =>
     setForm((f) => ({ ...f, [k]: v }));
 
-  const submit = (e: React.FormEvent<HTMLFormElement>) => {
+  const roleLabel: Record<string, string> = {
+    user: "Wheelchair user",
+    family: "Caretaker",
+    clinician: "Clinician",
+  };
+
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (pending) return;
+    setPending(true);
+    setError(null);
+    const res = await submitLead({
+      type: "waitlist",
+      email: form.email,
+      name: form.name,
+      source: "/waitlist",
+      company_website: hp,
+      data: {
+        Phone: form.phone,
+        "City & state": form.city,
+        "I am a": roleLabel[form.role] ?? form.role,
+        Wheelchair: form.chair,
+        Comment: form.comment,
+      },
+    });
+    setPending(false);
+    if (res.ok) setSubmitted(true);
+    else setError(res.error ?? "Something went wrong.");
   };
 
   return (
@@ -136,6 +166,7 @@ export default function WaitlistScreen() {
 
               {!submitted && (
                 <form style={ws.formBody} onSubmit={submit}>
+                  <Honeypot value={hp} onChange={setHp} />
                   <div style={ws.formRow}>
                     <label style={ws.formLabel} htmlFor="wl-name">
                       Full name
@@ -250,9 +281,14 @@ export default function WaitlistScreen() {
                       rows={4}
                     />
                   </div>
-                  <button type="submit" className="wl-cta" style={ws.formCta}>
-                    Submit interest &rarr;
+                  <button type="submit" className="wl-cta" style={{ ...ws.formCta, opacity: pending ? 0.7 : 1 }} disabled={pending}>
+                    {pending ? "Sending…" : "Submit interest →"}
                   </button>
+                  {error && (
+                    <div role="alert" style={ws.formError}>
+                      {error}
+                    </div>
+                  )}
                   <div style={ws.formNote}>
                     No payment. No spam. One short note per quarter, max.
                   </div>
@@ -391,6 +427,7 @@ const ws: Record<string, CSSProperties> = {
   formHint: { fontFamily: "var(--font-sans)", fontSize: 12, color: "var(--color-muted)", marginTop: 2 },
   formCta: { marginTop: 12, height: 52, borderRadius: 6, border: 0, background: "var(--color-primary)", color: "#fff", fontFamily: "var(--font-sans)", fontSize: 15, fontWeight: 500, cursor: "pointer", boxShadow: "var(--shadow-cta-rest)", transition: "background var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out)" },
   formNote: { fontFamily: "var(--font-sans)", fontSize: 12, color: "var(--color-muted)", marginTop: 4, textAlign: "center", lineHeight: 1.5 },
+  formError: { fontFamily: "var(--font-sans)", fontSize: 13, color: "var(--color-error)", marginTop: 4, textAlign: "center", lineHeight: 1.5 },
 
   toggleRow: { display: "flex", gap: 8 },
   toggleBtn: { flex: 1, height: 44, borderRadius: 6, border: "1px solid var(--color-hairline)", fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 500, cursor: "pointer", padding: "0 8px" },

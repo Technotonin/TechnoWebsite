@@ -7,6 +7,8 @@ import {
   type FormEvent,
 } from "react";
 import Reveal from "@/components/Reveal";
+import Honeypot from "@/components/Honeypot";
+import { submitLead } from "@/lib/leads/client";
 import { ensureGsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 
 const whyNowRows = [
@@ -74,13 +76,42 @@ export default function InvestorsScreen() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [hp, setHp] = useState("");
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
 
+  const CATEGORY_LABELS: Record<string, string> = {
+    institutional: "Institutional VC / hardware fund",
+    healthcare: "Healthcare / medical-device investor",
+    impact: "Impact / accessibility-focused fund",
+    angel: "Angel or family office",
+    strategic: "Strategic / DME / OEM",
+    other: "Other",
+  };
+
   const upd = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
-  const submit = (e: FormEvent<HTMLFormElement>) => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (pending) return;
+    setPending(true);
+    setError(null);
+    const res = await submitLead({
+      type: "investor",
+      email: form.email,
+      name: form.name,
+      source: "/investors",
+      company_website: hp,
+      data: {
+        "Role at firm": form.role,
+        "Investor type": CATEGORY_LABELS[form.category] ?? form.category,
+        Message: form.message,
+      },
+    });
+    setPending(false);
+    if (res.ok) setSubmitted(true);
+    else setError(res.error ?? "Something went wrong.");
   };
   const scrollToForm = () => {
     formRef.current?.scrollIntoView({
@@ -311,6 +342,7 @@ export default function InvestorsScreen() {
 
             {!submitted && (
               <form style={inv.formCard} className="inv-form-card" onSubmit={submit}>
+                <Honeypot value={hp} onChange={setHp} />
                 <div style={inv.formGrid2} className="inv-form-grid2">
                   <div style={inv.formRow}>
                     <label htmlFor="inv-name" style={inv.formLabel}>Full name</label>
@@ -396,10 +428,11 @@ export default function InvestorsScreen() {
                 <div style={inv.formActions}>
                   <button
                     type="submit"
-                    style={inv.ctaPrimary}
+                    style={{ ...inv.ctaPrimary, opacity: pending ? 0.7 : 1 }}
                     className="inv-cta-primary"
+                    disabled={pending}
                   >
-                    Send request
+                    {pending ? "Sending…" : "Send request"}
                   </button>
                   <div style={inv.formInline}>
                     or email{" "}
@@ -408,6 +441,11 @@ export default function InvestorsScreen() {
                     </a>
                   </div>
                 </div>
+                {error && (
+                  <div role="alert" style={inv.formError}>
+                    {error}
+                  </div>
+                )}
               </form>
             )}
 
@@ -542,6 +580,7 @@ const inv: Record<string, CSSProperties> = {
   formTextarea: { borderRadius: 6, border: "1px solid var(--color-hairline)", padding: "12px 16px", fontFamily: "var(--font-sans)", fontSize: 15, color: "var(--color-ink)", outline: 0, background: "var(--color-canvas)", resize: "vertical", minHeight: 100 },
   formActions: { display: "flex", gap: 16, alignItems: "center", marginTop: 8, flexWrap: "wrap" },
   formInline: { fontFamily: "var(--font-sans)", fontSize: 13, color: "var(--color-muted)" },
+  formError: { fontFamily: "var(--font-sans)", fontSize: 13, color: "var(--color-error)", marginTop: 12, textAlign: "center", lineHeight: 1.5 },
   formMail: { color: "var(--color-primary)", textDecoration: "none" },
 
   // Success

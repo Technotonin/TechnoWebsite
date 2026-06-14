@@ -4,6 +4,7 @@ import "./globals.css";
 import TopNav from "@/components/TopNav";
 import Footer from "@/components/Footer";
 import { SITE_URL, organizationJsonLd, jsonLdScript, absoluteUrl } from "@/lib/seo";
+import { Analytics } from '@vercel/analytics/next';
 
 // Brand stack is Söhne / Tiempos Headline / Berkeley Mono (paid licenses).
 // Shipping the design system's documented substitutes.
@@ -108,6 +109,7 @@ export default function RootLayout({
         <TopNav />
         {children}
         <Footer />
+        <Analytics />
       </body>
     </html>
   );

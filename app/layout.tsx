@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter_Tight, Source_Serif_4, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import TopNav from "@/components/TopNav";
 import Footer from "@/components/Footer";
@@ -74,6 +76,12 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
+  // Google Search Console verification. To verify via the HTML-tag method,
+  // set GOOGLE_SITE_VERIFICATION in your Vercel env to the token Google gives
+  // you and redeploy. (DNS-based verification needs no token here.)
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
 };
 
 // Sitewide structured data: the company and the site itself. Pages add
@@ -108,6 +116,10 @@ export default function RootLayout({
         <TopNav />
         {children}
         <Footer />
+        {/* Privacy-friendly, same-origin (no cookie banner, no CSP changes).
+            Data shows in the Vercel dashboard once enabled for the project. */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -82,12 +82,8 @@ export default function HomeScreen() {
   const [activeStep, setActiveStep] = useState(0);
   const heroRef = useRef<HTMLElement | null>(null);
 
-  // Intro card: click-to-play the full hype demo with sound + controls.
-  const introVideoRef = useRef<HTMLVideoElement | null>(null);
-  const [introStarted, setIntroStarted] = useState(false);
-
-  // The idle-state boomerang autoplays muted, but must hold still for users
-  // who ask the OS for reduced motion.
+  // Intro card: a silent forward+reverse loop of PAWE attaching. It autoplays
+  // muted, but must hold still for users who ask the OS for reduced motion.
   const boomerangRef = useRef<HTMLVideoElement | null>(null);
   useEffect(() => {
     const v = boomerangRef.current;
@@ -100,21 +96,6 @@ export default function HomeScreen() {
     apply();
     mql.addEventListener("change", apply);
     return () => mql.removeEventListener("change", apply);
-  }, []);
-
-  // Sound-on video shouldn't keep talking once scrolled away; pause it
-  // off-screen and leave resuming to the user (it was user-initiated).
-  useEffect(() => {
-    const v = introVideoRef.current;
-    if (!v) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting && !v.paused) v.pause();
-      },
-      { threshold: 0.2 }
-    );
-    io.observe(v);
-    return () => io.disconnect();
   }, []);
 
   // Attach card: the same video runs inline (muted) and drives which step
@@ -275,56 +256,16 @@ export default function HomeScreen() {
             <Reveal delay={0.1}>
               <div style={hsl.videoCard}>
                 <video
-                  ref={introVideoRef}
-                  src={DEMO_VIDEO}
-                  poster="/assets/photos/antonio-on-pawe-poster.jpg"
-                  preload="metadata"
+                  ref={boomerangRef}
+                  src={INTRO_BOOMERANG}
+                  autoPlay
+                  muted
+                  loop
                   playsInline
-                  controls={introStarted}
-                  style={{
-                    ...hsl.videoTag,
-                    // cover the portrait card while idle; letterbox once
-                    // playing so the full frame is visible
-                    objectFit: introStarted ? "contain" : "cover",
-                  }}
-                  aria-label="PAWE demo video"
+                  preload="auto"
+                  aria-label="PAWE attaching to a manual wheelchair"
+                  style={hsl.videoTag}
                 />
-                {!introStarted && (
-                  <video
-                    ref={boomerangRef}
-                    src={INTRO_BOOMERANG}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="auto"
-                    aria-hidden="true"
-                    tabIndex={-1}
-                    style={hsl.videoTag}
-                  />
-                )}
-                {!introStarted && (
-                  <button
-                    type="button"
-                    aria-label="Play demo"
-                    className="home-video-play"
-                    style={hsl.videoPlay}
-                    onClick={() => {
-                      setIntroStarted(true);
-                      introVideoRef.current?.play().catch(() => {});
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translate(-50%, -50%) scale(1.06)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translate(-50%, -50%) scale(1)";
-                    }}
-                  >
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </button>
-                )}
               </div>
             </Reveal>
           </div>
@@ -850,24 +791,6 @@ const hsl: Record<string, CSSProperties> = {
     objectFit: "cover",
     display: "block",
     background: "#1A1612",
-  },
-  videoPlay: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 84,
-    height: 84,
-    borderRadius: "50%",
-    border: 0,
-    cursor: "pointer",
-    background: "rgba(255,255,255,0.95)",
-    color: "var(--color-primary)",
-    display: "grid",
-    placeItems: "center",
-    boxShadow: "0 18px 40px rgba(0,0,0,0.35)",
-    transition: "opacity 200ms ease, transform 200ms ease",
-    paddingLeft: 4,
   },
 
   // 3. Three-stat strip below intro — lifted bubble

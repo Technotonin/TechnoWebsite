@@ -69,9 +69,14 @@ export const organizationJsonLd = {
 
 /** Serialize a schema.org graph for a JSON-LD script tag. */
 export function jsonLdScript(graph: object | object[]) {
-  return JSON.stringify(
+  const json = JSON.stringify(
     { "@context": "https://schema.org", "@graph": Array.isArray(graph) ? graph : [graph] },
     null,
     0
   );
+  // Defense in depth: JSON.stringify does not escape `<`, so a literal
+  // `</script>` in any field could break out of the script tag. Our data is
+  // all static and trusted, but escaping `<` keeps this safe even if a future
+  // value ever carries markup.
+  return json.replace(/</g, "\\u003c");
 }

@@ -8,6 +8,7 @@ import CountUp from "@/components/CountUp";
 import SectionHeading from "@/components/SectionHeading";
 import FAQ from "@/components/FAQ";
 import { ensureGsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
+import { pressLogos } from "@/lib/press";
 
 const attachSteps = [
   { n: "1", h: "Align", b: "Drop PAWE onto your chair's quick-attach poles." },
@@ -40,16 +41,6 @@ const testimonials = [
     name: "Beta user",
     quote: "Using and helping this device come to be is the best thing I've done in the past 8 years.",
   },
-];
-
-const featuredLogos = [
-  { src: "/assets/logos/boston25-news-logo.png", alt: "Boston 25 News" },
-  { src: "/assets/logos/gbh-news.png", alt: "GBH News" },
-  { src: "/assets/logos/boston-news.png", alt: "Boston News" },
-  { src: "/assets/logos/bellingham-bulletin.png", alt: "Bellingham Bulletin" },
-  { src: "/assets/logos/wpi-logo.png", alt: "WPI" },
-  { src: "/assets/logos/bu-logo.png", alt: "Boston University" },
-  { src: "/assets/logos/efest-logo.png", alt: "e-Fest Undergraduate Entrepreneurship Competition" },
 ];
 
 const faqItems = [
@@ -482,15 +473,37 @@ export default function HomeScreen() {
           <div className="home-marquee-track" style={hsl.marqueeTrack}>
             {[...Array(4)].map((_, dup) => (
               <div key={dup} style={hsl.marqueeGroup} aria-hidden={dup > 0 ? "true" : undefined}>
-                {featuredLogos.map((l) => (
-                  <img
-                    key={l.src}
-                    src={l.src}
-                    alt={dup > 0 ? "" : l.alt}
-                    decoding="async"
-                    style={hsl.featuredLogo}
-                  />
-                ))}
+                {pressLogos.map((l) => {
+                  const logo = (
+                    <img
+                      src={l.src}
+                      alt={dup > 0 ? "" : l.alt}
+                      decoding="async"
+                      className="press-logo"
+                      style={hsl.featuredLogo}
+                    />
+                  );
+                  // The copies after the first are decorative, so their links
+                  // stay out of the tab order.
+                  return l.href ? (
+                    <a
+                      key={l.src}
+                      href={l.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="press-link"
+                      aria-label={dup > 0 ? undefined : `${l.alt}: read the story about PAWE`}
+                      tabIndex={dup > 0 ? -1 : undefined}
+                      style={hsl.featuredLink}
+                    >
+                      {logo}
+                    </a>
+                  ) : (
+                    <span key={l.src} style={hsl.featuredLink}>
+                      {logo}
+                    </span>
+                  );
+                })}
               </div>
             ))}
           </div>
@@ -989,9 +1002,12 @@ const hsl: Record<string, CSSProperties> = {
   featuredSection: { padding: "80px 0 80px", background: "var(--color-canvas)", borderTop: "1px solid var(--color-hairline-soft)" },
   featuredEyebrow: { fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 700, letterSpacing: "1.6px", textTransform: "uppercase", color: "var(--color-muted)", textAlign: "center", marginBottom: 40 },
   marqueeViewport: { width: "100%", overflow: "hidden", maskImage: "linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%)", WebkitMaskImage: "linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%)" },
-  marqueeTrack: { display: "flex", width: "max-content", animation: "pawe-marquee 36s linear infinite" },
+  // Animation is in globals.css (.home-marquee-track) so hover can pause it.
+  marqueeTrack: { display: "flex", width: "max-content" },
   marqueeGroup: { display: "flex", alignItems: "center", gap: 72, paddingRight: 72, flexShrink: 0 },
-  featuredLogo: { height: 36, maxWidth: 180, objectFit: "contain", filter: "grayscale(1) brightness(0.55)", opacity: 0.8 },
+  featuredLink: { display: "inline-flex", alignItems: "center", flexShrink: 0 },
+  // Greyscale/opacity live on .press-logo in globals.css so hover can lift them.
+  featuredLogo: { height: 36, maxWidth: 180, objectFit: "contain" },
 
   // 9. FAQ
   faqSection: { padding: "120px 0", background: "var(--color-surface-soft)" },

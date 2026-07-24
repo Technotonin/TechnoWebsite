@@ -10,6 +10,7 @@ import Reveal from "@/components/Reveal";
 import Honeypot from "@/components/Honeypot";
 import { submitLead } from "@/lib/leads/client";
 import { ensureGsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
+import { pressLogos } from "@/lib/press";
 
 const whyNowRows = [
   {
@@ -24,16 +25,6 @@ const whyNowRows = [
     h: "The demographic wave is beginning",
     b: "The oldest Americans — the highest wheelchair-use cohort — are the fastest-growing. We anchor on working-age users to earn insurance coverage first, then meet the wave with a covered product as it crests.",
   },
-];
-
-const seenInLogos = [
-  { src: "/assets/logos/gbh-news.png", alt: "GBH News logo" },
-  { src: "/assets/logos/boston25-news-logo.png", alt: "Boston 25 News logo" },
-  { src: "/assets/logos/boston-news.png", alt: "Boston News logo" },
-  { src: "/assets/logos/bellingham-bulletin.png", alt: "Bellingham Bulletin logo" },
-  { src: "/assets/logos/wpi-logo.png", alt: "Worcester Polytechnic Institute logo" },
-  { src: "/assets/logos/bu-logo.png", alt: "Boston University logo" },
-  { src: "/assets/logos/efest-logo.png", alt: "e-Fest entrepreneurship competition logo" },
 ];
 
 const founders = [
@@ -196,16 +187,35 @@ export default function InvestorsScreen() {
           <Reveal style={inv.seenInWrap}>
             <div style={inv.seenInLabel}>As seen in</div>
             <div style={inv.seenInRow} className="inv-seen-row">
-              {seenInLogos.map((l) => (
-                <img
-                  key={l.src}
-                  src={l.src}
-                  alt={l.alt}
-                  loading="lazy"
-                  decoding="async"
-                  style={inv.seenLogo}
-                />
-              ))}
+              {pressLogos.map((l) => {
+                const logo = (
+                  <img
+                    src={l.src}
+                    alt={l.alt}
+                    loading="lazy"
+                    decoding="async"
+                    className="press-logo"
+                    style={inv.seenLogo}
+                  />
+                );
+                return l.href ? (
+                  <a
+                    key={l.src}
+                    href={l.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="press-link"
+                    aria-label={`${l.alt}: read the story about PAWE`}
+                    style={inv.seenLink}
+                  >
+                    {logo}
+                  </a>
+                ) : (
+                  <span key={l.src} style={inv.seenLink}>
+                    {logo}
+                  </span>
+                );
+              })}
             </div>
           </Reveal>
         </div>
@@ -551,7 +561,9 @@ const inv: Record<string, CSSProperties> = {
   seenInWrap: { marginTop: 56, paddingTop: 8 },
   seenInLabel: { fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 700, letterSpacing: "1.6px", textTransform: "uppercase", color: "var(--color-muted)", textAlign: "center", marginBottom: 28 },
   seenInRow: { display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: 56 },
-  seenLogo: { height: 36, maxWidth: 160, objectFit: "contain", filter: "grayscale(1) brightness(0.55)", opacity: 0.85 },
+  seenLink: { display: "inline-flex", alignItems: "center" },
+  // Greyscale/opacity live on .press-logo in globals.css so hover can lift them.
+  seenLogo: { height: 36, maxWidth: 160, objectFit: "contain" },
 
   // 3. Team (dark)
   teamSection: { padding: "120px 0", background: "var(--color-ink)" },

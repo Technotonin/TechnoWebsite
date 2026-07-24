@@ -173,6 +173,27 @@ h1, h2 { text-wrap: balance; }
   to   { transform: translateX(-25%); }
 }
 
+/* The animation lives here rather than inline so the hover/focus pause below
+   can win — an inline `animation` shorthand also pins animation-play-state. */
+.home-marquee-track { animation: pawe-marquee 36s linear infinite; }
+
+/* Each logo links to its story — hold the track still while a visitor is
+   aiming at one, so they aren't chasing a moving target. */
+.home-marquee-track:hover,
+.home-marquee-track:focus-within { animation-play-state: paused; }
+
+/* Press logos sit muted until hovered, then come up to full colour. Same
+   treatment in the home marquee and the investors page's static row. */
+.press-logo {
+  filter: grayscale(1) brightness(0.55);
+  opacity: 0.8;
+  transition: filter var(--duration-fast) var(--ease-out), opacity var(--duration-fast) var(--ease-out);
+}
+.press-link { border-radius: 4px; }
+.press-link:hover .press-logo,
+.press-link:focus-visible .press-logo { filter: none; opacity: 1; }
+.press-link:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 6px; }
+
 /* Submit-button spinner */
 @keyframes pawe-spin {
   to { transform: rotate(360deg); }

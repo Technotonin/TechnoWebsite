@@ -58,6 +58,20 @@ const advisors = [
   },
 ];
 
+// Rendered as a centred pair below the row of three, matching the about page.
+const advisorsPair = [
+  {
+    name: "Gordon Hull",
+    role: "Co-owner of GS Enterprises LLC",
+    photo: "/assets/team/gordon-hull.jpg",
+  },
+  {
+    name: "Susan Conrad",
+    role: "Co-owner of GS Enterprises LLC",
+    photo: "/assets/team/susan-conrad.jpg",
+  },
+];
+
 export default function InvestorsScreen() {
   const [form, setForm] = useState({
     name: "",
@@ -274,6 +288,25 @@ export default function InvestorsScreen() {
             className="inv-team-grid"
           >
             {advisors.map((t) => (
+              <div key={t.name} style={inv.teamCardLarge}>
+                <div
+                  style={{
+                    ...inv.teamPhotoLarge,
+                    backgroundImage: `url('${t.photo}')`,
+                  }}
+                ></div>
+                <div style={inv.teamNameLarge}>{t.name}</div>
+                <div style={inv.teamRoleLarge}>{t.role}</div>
+              </div>
+            ))}
+          </Reveal>
+          <Reveal
+            selector=":scope > *"
+            stagger={0.1}
+            style={{ ...inv.teamPair, marginTop: 48 }}
+            className="inv-team-pair"
+          >
+            {advisorsPair.map((t) => (
               <div key={t.name} style={inv.teamCardLarge}>
                 <div
                   style={{
